@@ -98,7 +98,7 @@ apiRoutes.post('/add-pack', function(req, res) {
       res.json({
         success: 1,
         message: 'Saved data OK',
-        data: _.pick(savePack, ['phoneNumber', '_id', '__v'])
+        data: _.pick(savePack, ['phoneNumber', 'id'])
       });
     }
   });
