@@ -127,8 +127,6 @@ apiRoutes.get('/get-pack-add',function(req, res){
 
 });
 
-
-
 apiRoutes.post('/register', function(req, res) {
   var body = req.body;
   var password = body.password;
@@ -224,6 +222,8 @@ app.post('/api/testhash', function(req, res) {
     res.json({message : "Đi chỗ khác chơi"});
   }
 });
+
+
 
 
 
