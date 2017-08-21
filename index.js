@@ -9,6 +9,7 @@ var jwt = require('jsonwebtoken');
 var Hottie = require('./models/hottie');
 var User = require('./models/user');
 var Pack = require('./models/pack');
+var Sports= require('./models/sports');
 var config = require('./config');
 
 var app = express();
@@ -126,6 +127,58 @@ apiRoutes.get('/get-pack-add',function(req, res){
   });
 
 });
+
+
+apiRoutes.post('/add-sports', function(req, res) {
+  var body = req.body;
+  var sportsImgUrl = body.sportsImgUrl;
+  var sportsName= body.sportsName;
+
+  var saveSports = function( sportsImgUrl,sportsName) {
+  var sports = new Sports({
+    sportsImgUrl:sportsImgUrl,
+    sportsName:sportsName
+  });
+
+  sports.save(function(err, saveSports) {
+    if (err) {
+      res.json({
+        success: 0,
+        message: 'Saved data failed'
+      });
+    } else {
+      res.json({
+        success: 1,
+        message: 'Saved data OK',
+        data: _.pick(saveSports, ['sportsName', 'id'])
+      });
+    }
+  });
+  };
+
+  Sports.findOne({sportsName: sportsName}, function(err, user) {
+    if (err) {
+      res.json({success: 0, message: "Database error, could not find pack"});
+    } else {
+      if(user) {
+        res.json({success: 0, message: "Register failed, duplicate Sports"});
+      } else {
+        saveSports(sportsImgUrl,sportsName);
+      }
+    }
+  });
+});
+apiRoutes.get('/get-sports',function(req, res){
+  Sports.find({},function(err,user){
+    if (err) {
+      res.json({success: 0, message: "Database error, could not find sports"});
+    } else {
+        res.send(user);
+      }
+  });
+});
+
+
 
 apiRoutes.post('/register', function(req, res) {
   var body = req.body;
