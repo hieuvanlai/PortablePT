@@ -158,7 +158,7 @@ apiRoutes.post('/add-sports', function(req, res) {
 
   Sports.findOne({sportsName: sportsName}, function(err, user) {
     if (err) {
-      res.json({success: 0, message: "Database error, could not find pack"});
+      res.json({success: 0, message: "Database error, could not find Sports"});
     } else {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate Sports"});
@@ -171,7 +171,7 @@ apiRoutes.post('/add-sports', function(req, res) {
 apiRoutes.get('/get-sports',function(req, res){
   Sports.find({},function(err,user){
     if (err) {
-      res.json({success: 0, message: "Database error, could not find sports"});
+      res.json({success: 0, message: "Database error, could not find Sports"});
     } else {
         res.send(user);
       }
