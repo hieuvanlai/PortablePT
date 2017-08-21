@@ -158,7 +158,7 @@ apiRoutes.post('/add-sports', function(req, res) {
 
   Sports.findOne({sportsName: sportsName}, function(err, user) {
     if (err) {
-      res.json({success: 0, message: "Database error, could not find Sports"});
+      res.json({success: 0, message: "Database error, could not find  Sports"});
     } else {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate Sports"});
@@ -246,7 +246,7 @@ apiRoutes.use(function(req, res, next) {
   } else {
     jwt.verify(token, app.get('superSecret'), function(err, decodedUser) {
         if (err) {
-          res.json({success: 0, message: "Could not understand token", err: err});
+          res.json({success: 0, message: "Could not understand  token", err: err});
         } else {
           req.user = decodedUser;
           next();
