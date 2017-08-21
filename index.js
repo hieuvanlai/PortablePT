@@ -77,8 +77,9 @@ apiRoutes.post('/add-pack', function(req, res) {
   var coach=body.coach;
   var price=body.price;
   var duration=body.duration;
+  var packImgUrl=body.packImgUrl;
 
-  var savePack = function( phoneNumber,purpose,packName,coach,price,duration) {
+  var savePack = function( phoneNumber,purpose,packName,coach,price,duration,packImgUrl) {
   var pack = new Pack({
     phoneNumber:phoneNumber,
     purpose:purpose,
@@ -86,6 +87,7 @@ apiRoutes.post('/add-pack', function(req, res) {
     coach:coach,
     price:price,
     duration:duration,
+    packImgUrl:packImgUrl
 
   });
 
@@ -112,7 +114,7 @@ apiRoutes.post('/add-pack', function(req, res) {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate Pack"});
       } else {
-        savePack(phoneNumber,purpose,packName,coach,price);
+        savePack(phoneNumber,purpose,packName,coach,price,duration,packImgUrl);
       }
     }
   });
