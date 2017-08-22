@@ -119,8 +119,8 @@ apiRoutes.post('/add-pack', function(req, res) {
     }
   });
 });
-apiRoutes.get('/get-pack-add',function(req, res){
-  Pack.find({},function(err,user){
+apiRoutes.get('/get-pack-add/:searchString',function(req, res){
+  Pack.find({purpose:req.params.searchString},function(err,user){
     if (err) {
       res.json({success: 0, message: "Database error, could not find pack"});
     } else {
@@ -129,6 +129,31 @@ apiRoutes.get('/get-pack-add',function(req, res){
   });
 
 });
+
+
+apiRoutes.get('/search-pack-coach/:searchString',function(req, res){
+  Pack.find({$text: {$search: req.params.searchString}},function(err,pack){
+    if (err) {
+      res.json({success: 0, message: "Database error, could not find user"});
+    } else {
+      
+      User.find({$text: {$search: '01668113783'},role:'HLV'},function(err,users){
+        if (err) {
+          res.json({success: 0, message: "Database error, could not find pack"});
+        } else {
+            res.json({
+              pack, 
+              users: users.map(function(user, index){
+                return _.pick(user, ["_id", "coach","phoneNumber","email"]);
+              })
+            });
+          }
+      });
+      }
+  });
+
+});
+
 
 
 apiRoutes.post('/add-sports', function(req, res) {
@@ -187,29 +212,27 @@ apiRoutes.post('/register', function(req, res) {
   var password = body.password;
   var id= body.id;
   var imgAvata=body.imgAvata;
-  var firstName=body.firstName;
-  var lastName=body.lastName;
   var email= body.email;
   var gender= body.gender;
   var birthday=body.birthday;
   var location=body.location;
   var phoneNumber = body.phoneNumber;
   var role = body.role;
+  var name=body.name;
 
 
-  var saveUser = function( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role) {
+  var saveUser = function( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role,name) {
   var user = new User({
     password: bcrypt.hashSync(password, 10), // TODO
     id:id,
     imgAvata: imgAvata,
-    firstName: firstName,
-    lastName:lastName,
     email: email,
     gender: gender,
     birthday: birthday,
     location:location,
     phoneNumber: phoneNumber,
-    role:role
+    role:role,
+    name:name
   });
 
   user.save(function(err, saveUser) {
@@ -235,7 +258,7 @@ apiRoutes.post('/register', function(req, res) {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate user"});
       } else {
-        saveUser( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role);
+        saveUser( password,id,imgAvata,email,gender,birthday,location,phoneNumber,role,name);
       }
     }
   });

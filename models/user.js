@@ -7,13 +7,12 @@ var userSchema = new Schema({
   password: String,
   id:String,
   imgAvata:String,
-  firstName:String,
-  lastName:String,
+  name:String,
   email:String,
   gender:String,
   birthday:String,
   location:String,
-  
+  role:String
 });
-
+userSchema.index({'$**': 'text'});
 module.exports = mongoose.model('User', userSchema);

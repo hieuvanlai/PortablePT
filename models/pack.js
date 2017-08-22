@@ -10,5 +10,5 @@ var packSchema = new Schema({
     duration:String,
     packImgUrl:String
   });
-
+packSchema.index({'$': 'text'});
 module.exports = mongoose.model('Pack', packSchema);
