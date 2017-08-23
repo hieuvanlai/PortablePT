@@ -78,8 +78,9 @@ apiRoutes.post('/add-pack', function(req, res) {
   var price=body.price;
   var duration=body.duration;
   var packImgUrl=body.packImgUrl;
+  var address=body.address;
 
-  var savePack = function( phoneNumber,purpose,packName,coach,price,duration,packImgUrl) {
+  var savePack = function( phoneNumber,purpose,packName,coach,price,duration,packImgUrl,address) {
   var pack = new Pack({
     phoneNumber:phoneNumber,
     purpose:purpose,
@@ -87,7 +88,8 @@ apiRoutes.post('/add-pack', function(req, res) {
     coach:coach,
     price:price,
     duration:duration,
-    packImgUrl:packImgUrl
+    packImgUrl:packImgUrl,
+    address:address,
 
   });
 
@@ -114,7 +116,7 @@ apiRoutes.post('/add-pack', function(req, res) {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate Pack"});
       } else {
-        savePack(phoneNumber,purpose,packName,coach,price,duration,packImgUrl);
+        savePack(phoneNumber,purpose,packName,coach,price,duration,packImgUrl,address);
       }
     }
   });
@@ -132,11 +134,14 @@ apiRoutes.get('/get-pack-add/:searchString',function(req, res){
 
 
 apiRoutes.get('/search-pack-coach/:searchString',function(req, res){
-  Pack.find({$text: {$search: req.params.searchString}},function(err,pack){
+  Pack.find({ 
+
+       $or: [{phoneNumber: { $regex: /784/i }}, {coach: { $regex: /784/i }},{packName: { $regex: /784/i }},{price: { $regex: /784/i }}] 
+ 
+  },function(err,pack){
     if (err) {
       res.json({success: 0, message: "Database error, could not find user"});
     } else {
-      
       User.find({$text: {$search: '01668113783'},role:'HLV'},function(err,users){
         if (err) {
           res.json({success: 0, message: "Database error, could not find pack"});
@@ -258,7 +263,7 @@ apiRoutes.post('/register', function(req, res) {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate user"});
       } else {
-        saveUser( password,id,imgAvata,email,gender,birthday,location,phoneNumber,role,name);
+        saveUser( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role,name);
       }
     }
   });

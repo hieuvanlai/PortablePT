@@ -8,7 +8,8 @@ var packSchema = new Schema({
     coach:String,
     price:String,
     duration:String,
-    packImgUrl:String
+    packImgUrl:String,
+    address:String
   });
 packSchema.index({'$': 'text'});
 module.exports = mongoose.model('Pack', packSchema);
