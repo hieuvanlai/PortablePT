@@ -121,8 +121,19 @@ apiRoutes.post('/add-pack', function(req, res) {
     }
   });
 });
+
 apiRoutes.get('/get-pack-add/:searchString',function(req, res){
   Pack.find({purpose:req.params.searchString},function(err,user){
+    if (err) {
+      res.json({success: 0, message: "Database error, could not find pack"});
+    } else {
+        res.send(user);
+      }
+  });
+
+});
+apiRoutes.get('/get-pack-all/',function(req, res){
+  Pack.find({},function(err,user){
     if (err) {
       res.json({success: 0, message: "Database error, could not find pack"});
     } else {
