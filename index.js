@@ -89,7 +89,7 @@ apiRoutes.post('/add-pack', function(req, res) {
     price:price,
     duration:duration,
     packImgUrl:packImgUrl,
-    address:address,
+    address:address
 
   });
 
@@ -136,20 +136,34 @@ apiRoutes.get('/get-pack-add/:searchString',function(req, res){
 apiRoutes.get('/search-pack-coach/:searchString',function(req, res){
   Pack.find({ 
 
-       $or: [{phoneNumber: { $regex: /784/i }}, {coach: { $regex: /784/i }},{packName: { $regex: /784/i }},{price: { $regex: /784/i }}] 
+       $or: [{phoneNumber: { $regex: new RegExp( req.params.searchString, 'i' ) }},
+        {coach: { $regex: new RegExp( req.params.searchString, 'i' ) }},
+        {packName: { $regex: new RegExp( req.params.searchString, 'i' ) }},
+        {price: { $regex: new RegExp( req.params.searchString, 'i' ) }}]
  
   },function(err,pack){
     if (err) {
       res.json({success: 0, message: "Database error, could not find user"});
     } else {
-      User.find({$text: {$search: '01668113783'},role:'HLV'},function(err,users){
+      User.find({ 
+          $and:[
+                {$or: [
+                  {phoneNumber: { $regex: new RegExp( req.params.searchString, 'i' ) }}, 
+                  {name: { $regex: new RegExp( req.params.searchString, 'i' ) }},
+                  {packName: { $regex: new RegExp( req.params.searchString, 'i' ) }},
+                  {price: { $regex: new RegExp( req.params.searchString, 'i' ) }}
+                    ]},
+                {role: "HLV"}
+              ]
+          }
+          ,function(err,users){
         if (err) {
           res.json({success: 0, message: "Database error, could not find pack"});
         } else {
             res.json({
               pack, 
               users: users.map(function(user, index){
-                return _.pick(user, ["_id", "coach","phoneNumber","email"]);
+                return _.pick(user, ["_id", "name","phoneNumber","email","role"]);
               })
             });
           }
