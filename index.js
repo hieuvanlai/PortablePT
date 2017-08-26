@@ -10,6 +10,9 @@ var Hottie = require('./models/hottie');
 var User = require('./models/user');
 var Pack = require('./models/pack');
 var Sports= require('./models/sports');
+var Person= require('./models/test');
+var Story= require('./models/test2');
+
 var config = require('./config');
 
 var app = express();
@@ -44,10 +47,10 @@ var apiRoutes = express.Router();
 
 apiRoutes.post('/login', (req, res) => {
   var body = req.body;
-  var username = body.phoneNumber; // hieu
+  var username = body.username; // hieu
   var password = body.password;
 
-  User.findOne({phoneNumber: phoneNumber}, (err, user) => {
+  User.findOne({username: username}, (err, user) => {
     if (err) {
       res.json({success: 0, message: "Database error, could not find user", err: err});
     } else {
@@ -143,6 +146,16 @@ apiRoutes.get('/get-pack-all',function(req, res){
 
 });
 
+apiRoutes.get('/get-user',function(req, res){
+  Story.find({}).
+  populate('author').
+  exec(function (err, story) {
+    if (err) return handleError(err);
+    res.json(story);
+    // prints "The author is Ian Fleming"
+  });
+
+});
 
 apiRoutes.get('/search-pack-coach/:searchString',function(req, res){
   Pack.find({ 
@@ -239,6 +252,7 @@ apiRoutes.get('/get-sports',function(req, res){
 
 apiRoutes.post('/register', function(req, res) {
   var body = req.body;
+  var username= body.username;
   var password = body.password;
   var id= body.id;
   var imgAvata=body.imgAvata;
@@ -251,7 +265,7 @@ apiRoutes.post('/register', function(req, res) {
   var name=body.name;
 
 
-  var saveUser = function( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role,name) {
+  var saveUser = function( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role,name,username) {
   var user = new User({
     password: bcrypt.hashSync(password, 10), // TODO
     id:id,
@@ -262,7 +276,8 @@ apiRoutes.post('/register', function(req, res) {
     location:location,
     phoneNumber: phoneNumber,
     role:role,
-    name:name
+    name:name,
+    username:username
   });
 
   user.save(function(err, saveUser) {
@@ -281,14 +296,14 @@ apiRoutes.post('/register', function(req, res) {
   });
   };
 
-  User.findOne({phoneNumber: phoneNumber}, function(err, user) {
+  User.findOne({username: username}, function(err, user) {
     if (err) {
       res.json({success: 0, message: "Database error, could not find user"});
     } else {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate user"});
       } else {
-        saveUser( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role,name);
+        saveUser( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role,name,username);
       }
     }
   });
