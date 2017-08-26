@@ -61,8 +61,8 @@ apiRoutes.post('/login', (req, res) => {
         if (bcrypt.compareSync(password, hash)) {
 
           var token = jwt.sign(user, app.get('superSecret'), { expiresIn : 60*60*24 });
-
-          res.json({success: 1, message: "Login OK", token: token });
+          res.json({success: 1, message: "Login OK", token: token,
+          data: _.pick(user, ['phoneNumber', '_id', '__v']) });
         } else {
           res.json({success: 0, message: "Invalid password"});
         }
@@ -287,9 +287,11 @@ apiRoutes.post('/register', function(req, res) {
         message: 'Saved data failed'
       });
     } else {
+      var token = jwt.sign(saveUser, app.get('superSecret'), { expiresIn : 60*60*24 });      
       res.json({
         success: 1,
         message: 'Saved data OK',
+        token :token,
         data: _.pick(saveUser, ['phoneNumber', '_id', '__v'])
       });
     }
