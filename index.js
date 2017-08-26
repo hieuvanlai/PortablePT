@@ -265,7 +265,7 @@ apiRoutes.post('/register', function(req, res) {
   var name=body.name;
 
 
-  var saveUser = function( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role,name,username) {
+  var saveUser = function( password,id,imgAvata,email,gender,birthday,location,phoneNumber,role,name,username) {
   var user = new User({
     password: bcrypt.hashSync(password, 10), // TODO
     id:id,
@@ -303,7 +303,7 @@ apiRoutes.post('/register', function(req, res) {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate user"});
       } else {
-        saveUser( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role,name,username);
+        saveUser( password,id,imgAvata,email,gender,birthday,location,phoneNumber,role,name,username);
       }
     }
   });
