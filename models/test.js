@@ -7,5 +7,4 @@ var personSchema = Schema({
   age: Number,
   stories: [{ type: Schema.Types.ObjectId, ref: 'Story' }]
 });
-
  module.exports = mongoose.model('Person', personSchema);

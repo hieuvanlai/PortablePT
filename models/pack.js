@@ -9,7 +9,8 @@ var packSchema = new Schema({
     price:String,
     duration:String,
     packImgUrl:String,
-    address:String
+    address:String,
+    type:String
   });
 packSchema.index({'$': 'text'});
 module.exports = mongoose.model('Pack', packSchema);
