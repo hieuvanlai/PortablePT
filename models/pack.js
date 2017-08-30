@@ -10,7 +10,8 @@ var packSchema = new Schema({
     duration:String,
     packImgUrl:String,
     address:String,
-    type:String
+    type:String,
+    coutStar:Number
   });
 packSchema.index({'$': 'text'});
 module.exports = mongoose.model('Pack', packSchema);

@@ -12,6 +12,7 @@ var Pack = require('./models/pack');
 var Sports= require('./models/sports');
 var Person= require('./models/test');
 var Story= require('./models/test2');
+var VotePack = require('./models/votepack');
 
 var config = require('./config');
 
@@ -71,6 +72,123 @@ apiRoutes.post('/login', (req, res) => {
   });
 });
 
+
+apiRoutes.post('/register', function(req, res) {
+  var body = req.body;
+  var username= body.username;
+  var password = body.password;
+  var id= body.id;
+  var imgAvata=body.imgAvata;
+  var email= body.email;
+  var gender= body.gender;
+  var birthday=body.birthday;
+  var location=body.location;
+  var phoneNumber = body.phoneNumber;
+  var role = body.role;
+  var name=body.name;
+
+
+  var saveUser = function( password,id,imgAvata,email,gender,birthday,location,phoneNumber,role,name,username) {
+  var user = new User({
+    password: bcrypt.hashSync(password, 10), // TODO
+    id:id,
+    imgAvata: imgAvata,
+    email: email,
+    gender: gender,
+    birthday: birthday,
+    location:location,
+    phoneNumber: phoneNumber,
+    role:role,
+    name:name,
+    username:username
+  });
+
+  user.save(function(err, saveUser) {
+    if (err) {
+      res.json({
+        success: 0,
+        message: 'Saved data failed'
+      });
+    } else {
+      var token = jwt.sign(saveUser, app.get('superSecret'), { expiresIn : 60*60*24 });      
+      res.json({
+        success: 1,
+        message: 'Saved data OK',
+        token :token,
+        data: _.pick(saveUser, ['phoneNumber', '_id', '__v'])
+      });
+    }
+  });
+  };
+
+  User.findOne({username: username}, function(err, user) {
+    if (err) {
+      res.json({success: 0, message: "Database error, could not find user"});
+    } else {
+      if(user) {
+        res.json({success: 0, message: "Register failed, duplicate user"});
+      } else {
+        saveUser( password,id,imgAvata,email,gender,birthday,location,phoneNumber,role,name,username);
+      }
+    }
+  });
+});
+
+apiRoutes.post('/vote',function(req,res){
+  var body = req.body;
+  var user = body.user;
+  var pack = body.pack;
+  var star = body.star;
+  var saveVotePack = function(user,pack,star){
+    var votepack = new VotePack({
+      user:user,
+      pack:pack,
+      star:star
+    });
+    votepack.save(function(err,saveVotePack){
+      if (err) {
+        res.json({
+          success: 0,
+          message: 'Saved data failed'
+        });
+      } else {
+        res.json({
+          success: 1,
+          message: 'Saved data OK',
+          data: _.pick(saveVotePack, ['star', '_id'])
+        });
+      }
+    })
+
+  };
+  VotePack.findOne({user:user,pack:pack},function(err,data){
+    if (err) {
+      res.json({success: 0, message: "Database error, could not find VotePack"});
+    } else {
+      if(data) {
+        VotePack.findByIdAndUpdate(_.pick(data,['_id']), { $set: { star: star }}, { new: true }, function (err, tank) {
+          if (err) return handleError(err);
+          VotePack.aggregate([
+           { $match : { pack : `${pack}` } },
+            {
+              $group : {
+                 _id : {pack: pack},
+                 totalPrice: { $sum: { $multiply: [ "$star" ] } }
+              }
+            }
+         ],function(err,use){
+
+          res.send(use);
+          
+        });
+          
+        });
+      } else {
+        saveVotePack(user,pack,star);
+      }
+    }
+  });
+})
 
 apiRoutes.post('/add-pack', function(req, res) {
   var body = req.body;
@@ -252,66 +370,7 @@ apiRoutes.get('/get-sports',function(req, res){
 
 
 
-apiRoutes.post('/register', function(req, res) {
-  var body = req.body;
-  var username= body.username;
-  var password = body.password;
-  var id= body.id;
-  var imgAvata=body.imgAvata;
-  var email= body.email;
-  var gender= body.gender;
-  var birthday=body.birthday;
-  var location=body.location;
-  var phoneNumber = body.phoneNumber;
-  var role = body.role;
-  var name=body.name;
 
-
-  var saveUser = function( password,id,imgAvata,email,gender,birthday,location,phoneNumber,role,name,username) {
-  var user = new User({
-    password: bcrypt.hashSync(password, 10), // TODO
-    id:id,
-    imgAvata: imgAvata,
-    email: email,
-    gender: gender,
-    birthday: birthday,
-    location:location,
-    phoneNumber: phoneNumber,
-    role:role,
-    name:name,
-    username:username
-  });
-
-  user.save(function(err, saveUser) {
-    if (err) {
-      res.json({
-        success: 0,
-        message: 'Saved data failed'
-      });
-    } else {
-      var token = jwt.sign(saveUser, app.get('superSecret'), { expiresIn : 60*60*24 });      
-      res.json({
-        success: 1,
-        message: 'Saved data OK',
-        token :token,
-        data: _.pick(saveUser, ['phoneNumber', '_id', '__v'])
-      });
-    }
-  });
-  };
-
-  User.findOne({username: username}, function(err, user) {
-    if (err) {
-      res.json({success: 0, message: "Database error, could not find user"});
-    } else {
-      if(user) {
-        res.json({success: 0, message: "Register failed, duplicate user"});
-      } else {
-        saveUser( password,id,imgAvata,email,gender,birthday,location,phoneNumber,role,name,username);
-      }
-    }
-  });
-});
 
 apiRoutes.use(function(req, res, next) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
