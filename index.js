@@ -125,8 +125,8 @@ apiRoutes.post('/register', function(req, res) {
   });
 });
 apiRoutes.post('/update-role',function(rep,res){
-    var body = res.body;
-    var id = body.id;
+    var body = rep.body;
+    var id= body.id;
     var role = body.role;
     User.findByIdAndUpdate(id,{$set : {role:role}},{new:true},function(err,update){
       if(err){
@@ -136,6 +136,23 @@ apiRoutes.post('/update-role',function(rep,res){
         res.json({success: 0, message: "Update OK"});
       }
     })
+});
+apiRoutes.post('/update-user',function(rep,res){
+  var body = rep.body;
+  var id= body.id;
+  var name = body.name;
+  var phoneNumber = body.phoneNumber;
+  var email = body.phoneNumber;
+  var birthday = birthday;
+  var imgAvata = body.imgAvata;
+  User.findByIdAndUpdate(id,{$set : [{name:name},{phoneNumber:phoneNumber},{birthday:birthday},{imgAvata,imgAvata}]},{new:true},function(err,update){
+    if(err){
+      res.json({success: 0, message: "Database error, could not find User"});
+    }
+    if(update){
+      res.json({success: 0, message: "Update OK"});
+    }
+  })
 });
 
 apiRoutes.post('/vote',function(req,res){
@@ -219,7 +236,6 @@ apiRoutes.post('/vote',function(req,res){
 
 apiRoutes.post('/add-pack', function(req, res) {
   var body = req.body;
-  var phoneNumber = body.phoneNumber;
   var purpose= body.purpose;
   var packName=body.packName;
   var coach=body.coach;
@@ -228,10 +244,10 @@ apiRoutes.post('/add-pack', function(req, res) {
   var packImgUrl=body.packImgUrl;
   var address=body.address;
   var type=body.type;
+  var calendar=body.calendar;
 
-  var savePack = function( phoneNumber,purpose,packName,coach,price,duration,packImgUrl,address,type) {
+  var savePack = function( purpose,packName,coach,price,duration,packImgUrl,address,type,calendar) {
   var pack = new Pack({
-    phoneNumber:phoneNumber,
     purpose:purpose,
     packName:packName,
     coach:coach,
@@ -239,7 +255,8 @@ apiRoutes.post('/add-pack', function(req, res) {
     duration:duration,
     packImgUrl:packImgUrl,
     address:address,
-    type:type
+    type:type,
+    calendar:calendar
 
   });
 
@@ -259,47 +276,47 @@ apiRoutes.post('/add-pack', function(req, res) {
   });
   };
 
-  Pack.findOne({packName: packName,phoneNumber:phoneNumber}, function(err, user) {
+  Pack.findOne({packName: packName,coach:coach}, function(err, user) {
     if (err) {
       res.json({success: 0, message: "Database error, could not find pack"});
     } else {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate Pack"});
       } else {
-        savePack(phoneNumber,purpose,packName,coach,price,duration,packImgUrl,address,type);
+        savePack(purpose,packName,coach,price,duration,packImgUrl,address,type,calendar);
       }
     }
   });
 });
 
 apiRoutes.get('/get-pack-add/:searchString',function(req, res){
-  Pack.find({purpose:req.params.searchString},function(err,user){
+  Pack.find({type:req.params.searchString}).populate('coach').exec(function(err,user){
     if (err) {
       res.json({success: 0, message: "Database error, could not find pack"});
     } else {
         res.send(user);
       }
-  });
+  });;
 
 });
 apiRoutes.get('/get-pack-all',function(req, res){
-  Pack.find({},function(err,user){
+  Pack.find({}).populate('coach').exec(function(err,user){
     if (err) {
-      res.json({success: 0, message: "Database error, could not find pack"});
+      res.send(err);
     } else {
         res.send(user);
       }
   });
-
 });
 
 apiRoutes.get('/get-user',function(req, res){
-  Story.
+  Pack.
   find({}).
-  populate('author'). // only return the Persons name
+  populate('coach'). // only return the Persons name
   exec(function (err, story) {
-    if (err) return handleError(err);
-    
+    if (err) {
+      res.send(err);      
+    }
     res.json(story)
 
     // prints "The authors age is null'
