@@ -2,16 +2,16 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 var packSchema = new Schema({
-    phoneNumber:String,
     packName:String,
     purpose:String,
-    coach:String,
+    coach:{ type: Schema.Types.ObjectId, ref: 'User' },
     price:String,
     duration:String,
     packImgUrl:String,
     address:String,
     type:String,
-    coutStar:Number
+    coutStar:Number,
+    mediumStar:Number
   });
 packSchema.index({'$': 'text'});
 module.exports = mongoose.model('Pack', packSchema);

@@ -24,15 +24,6 @@ mongoose.connect('mongodb://admin:admin@ds129183.mlab.com:29183/portablept',
 
 
 
-
-// var hottie = new Hottie({
-//     name: "Lệ rơi",
-//     age: 24,
-//     image: "http://cms.kienthuc.net.vn/uploaded/ngoclinh/2015_06_01/newfolder3/tai-san-sau-mot-nam-doi-doi-than-toc-cua-le-roi-hinh-11.jpg"
-//   });
-//
-// hottie.save();
-
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
@@ -63,7 +54,7 @@ apiRoutes.post('/login', (req, res) => {
 
           var token = jwt.sign(user, app.get('superSecret'), { expiresIn : 60*60*24 });
           res.json({success: 1, message: "Login OK", token: token,
-          data: _.pick(user, ['phoneNumber', '_id', '__v']) });
+          data: _.pick(user, ['phoneNumber','username','imgAvata','name','email','birthday','role', '_id', '__v']) });
         } else {
           res.json({success: 0, message: "Invalid password"});
         }
@@ -115,7 +106,7 @@ apiRoutes.post('/register', function(req, res) {
         success: 1,
         message: 'Saved data OK',
         token :token,
-        data: _.pick(saveUser, ['phoneNumber', '_id', '__v'])
+        data: _.pick(saveUser, ['phoneNumber','username','imgAvata','name','email','birthday','role', '_id', '__v'])
       });
     }
   });
@@ -132,6 +123,19 @@ apiRoutes.post('/register', function(req, res) {
       }
     }
   });
+});
+apiRoutes.post('/update-role',function(rep,res){
+    var body = res.body;
+    var id = body.id;
+    var role = body.role;
+    Pack.findByIdAndUpdate(id,{$set : {role:role}},{new:true},function(err,update){
+      if(err){
+        res.json({success: 0, message: "Database error, could not find User"});
+      }
+      if(update){
+        res.json({success: 0, message: "Update OK"});
+      }
+    })
 });
 
 apiRoutes.post('/vote',function(req,res){
@@ -152,15 +156,26 @@ apiRoutes.post('/vote',function(req,res){
           message: 'Saved data failed'
         });
       } else {
+        Pack.findByIdAndUpdate(pack,{$set : {coutStar:use[0].totalStar}},{new:true},function(err,update){
+          if(err){
+            res.json({success: 0, message: "Database error, could not find Pack"});
+            
+          }
+          if(update){
+            res.json({success: 0, message: "Update OK"});
+            
+          }
+        })
         res.json({
           success: 1,
-          message: 'Saved data OK',
+          message: 'Save data OK',
           data: _.pick(saveVotePack, ['star', '_id'])
         });
       }
     })
 
   };
+
   VotePack.findOne({user:user,pack:pack},function(err,data){
     if (err) {
       res.json({success: 0, message: "Database error, could not find VotePack"});
@@ -169,16 +184,28 @@ apiRoutes.post('/vote',function(req,res){
         VotePack.findByIdAndUpdate(_.pick(data,['_id']), { $set: { star: star }}, { new: true }, function (err, tank) {
           if (err) return handleError(err);
           VotePack.aggregate([
-           { $match : { pack : `${pack}` } },
+           { $match : { pack : new mongoose.Types.ObjectId(pack) } },
             {
               $group : {
                  _id : {pack: pack},
-                 totalPrice: { $sum: { $multiply: [ "$star" ] } }
+                 totalStar: { $sum: { $multiply: [ "$star" ] } }
               }
             }
          ],function(err,use){
 
-          res.send(use);
+          if(err){
+
+          }
+          if(use){
+            Pack.findByIdAndUpdate(pack,{$set : {coutStar:use[0].totalStar}},{new:true},function(err,update){
+              if(err){
+                res.json({success: 0, message: "Database error, could not find Pack"});
+              }
+              if(update){
+                res.json({success: 0, message: "Update OK"});
+              }
+            })
+          }
           
         });
           
@@ -267,13 +294,16 @@ apiRoutes.get('/get-pack-all',function(req, res){
 });
 
 apiRoutes.get('/get-user',function(req, res){
-  Story.find({}).
-  populate('author').
+  Story.
+  find({}).
+  populate('author'). // only return the Persons name
   exec(function (err, story) {
     if (err) return handleError(err);
-    res.json(story);
-    // prints "The author is Ian Fleming"
-  });
+    
+    res.json(story)
+
+    // prints "The authors age is null'
+  })
 
 });
 
