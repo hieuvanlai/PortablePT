@@ -128,7 +128,7 @@ apiRoutes.post('/update-role',function(rep,res){
     var body = res.body;
     var id = body.id;
     var role = body.role;
-    Pack.findByIdAndUpdate(id,{$set : {role:role}},{new:true},function(err,update){
+    User.findByIdAndUpdate(id,{$set : {role:role}},{new:true},function(err,update){
       if(err){
         res.json({success: 0, message: "Database error, could not find User"});
       }
