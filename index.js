@@ -311,18 +311,20 @@ apiRoutes.get('/get-pack-all',function(req, res){
   });
 });
 
-apiRoutes.get('/get-user',function(req, res){
-  Pack.
-  find({}).
-  populate('coach'). // only return the Persons name
-  exec(function (err, story) {
-    if (err) {
-      res.send(err);      
-    }
-    res.json(story)
+apiRoutes.get('/get-hlv',function(req, res){
+  User.
+  find({role:'HLV'},function(err,user){
+    if(err){
+      res.send(err)
 
-    // prints "The authors age is null'
+    }
+    if(user){
+      res.send(user);
+    }
+
+
   })
+  
 
 });
 
