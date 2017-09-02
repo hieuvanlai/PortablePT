@@ -13,6 +13,7 @@ var Sports= require('./models/sports');
 var Person= require('./models/test');
 var Story= require('./models/test2');
 var VotePack = require('./models/votepack');
+var RegisterPack = require('./models/register');
 
 var config = require('./config');
 
@@ -154,6 +155,81 @@ apiRoutes.post('/update-user',function(rep,res){
     }
   })
 });
+apiRoutes.post('/register-pack',function(req,res){
+  var body = req.body;
+  var user = body.user;
+  var pack = body.pack;
+  var saveRegisterPack = function(user,pack){
+    var votepack = new VotePack({
+      user:user,
+      pack:pack,
+      star:star
+    });
+    votepack.save(function(err,saveRegisterPack){
+      if (err) {
+        res.json({
+          success: 0,
+          message: 'Saved data failed'
+        });
+      } else {
+        res.json({
+          success: 1,
+          message: 'Save data OK',
+          data:saveRegisterPack
+        });
+      }
+    })
+
+  };
+  RegisterPack.findOne({user:user,pack:pack},function(err,data){
+    if (err) {
+      res.json({success: 0, message: "Database error, could not find VotePack"});
+    } else {
+      if(data) {
+        res.json({success: 0, message: "2 VotePack"});
+      } else {
+        saveRegisterPack(user,pack);
+      }
+    }
+  });
+})
+
+apiRoutes.post('/update-register-pack',function(rep,res){
+  var body = req.body;
+  var id = body.id;
+  RegisterPack.findByIdAndUpdate(id,{$set : {register:'TRUE'}},{new:true},function(err,update){
+    if(err){
+      res.json({success: 0, message: "Database error, could not find Pack"});
+    }
+    if(update){
+      res.json({success: 0, message: "Update OK"});
+    }
+  })
+
+})
+
+
+apiRoutes.get('/get-my-pack/:searchString',function(req,res){
+  RegisterPack.find({user:req.params.searchString}).populate('pack').exec(function(err,use){
+    if(err){
+      res.json({success: 0, message: "Database error, could not find Pack"});      
+    }
+    if(use){
+      res.send(use);
+    }
+  })
+})
+apiRoutes.get('/get-my-pack-hlv/:searchString',function(req,res){
+  Pack.find({coach:req.params.searchString},function(err,use){
+    if(err){
+      res.json({success: 0, message: "Database error, could not find Pack"});      
+    }
+    if(use){
+      res.send(use);      
+    }
+  })
+})
+
 
 apiRoutes.post('/vote',function(req,res){
   var body = req.body;
@@ -205,7 +281,8 @@ apiRoutes.post('/vote',function(req,res){
             {
               $group : {
                  _id : {pack: pack},
-                 totalStar: { $sum: { $multiply: [ "$star" ] } }
+                 totalStar: { $sum: { $multiply: [ "$star" ] } },
+                 count: { $sum: 1 }
               }
             }
          ],function(err,use){
@@ -214,7 +291,7 @@ apiRoutes.post('/vote',function(req,res){
 
           }
           if(use){
-            Pack.findByIdAndUpdate(pack,{$set : {coutStar:use[0].totalStar}},{new:true},function(err,update){
+            Pack.findByIdAndUpdate(pack,{$set : {coutStar:use[0].totalStar,coutStar:use[0].count}},{new:true},function(err,update){
               if(err){
                 res.json({success: 0, message: "Database error, could not find Pack"});
               }

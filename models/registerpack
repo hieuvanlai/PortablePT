@@ -1,10 +1,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var votepackSchema = Schema({
+var registerPackSchema = Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   pack: {type: Schema.Types.ObjectId,ref: 'Pack'},
-  star:Number,
-  coutStar:Number
+  register:String,
 })
 module.exports = mongoose.model('VotePack', votepackSchema);
