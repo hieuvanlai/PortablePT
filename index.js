@@ -151,7 +151,7 @@ apiRoutes.post('/update-user',function(rep,res){
       res.send(err);
     }
     if(update){
-      res.json({success: 0, message: "Update OK",use:update});
+      res.json({success: 0, message: "Update OK",data:update});
     }
   })
 });
