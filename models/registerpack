@@ -6,4 +6,4 @@ var registerPackSchema = Schema({
   pack: {type: Schema.Types.ObjectId,ref: 'Pack'},
   register:String,
 })
-module.exports = mongoose.model('VotePack', votepackSchema);
+module.exports = mongoose.model('RegisterPack', registerPackSchema);

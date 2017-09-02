@@ -13,7 +13,7 @@ var Sports= require('./models/sports');
 var Person= require('./models/test');
 var Story= require('./models/test2');
 var VotePack = require('./models/votepack');
-var RegisterPack = require('./models/register');
+var RegisterPack = require('./models/registerpack');
 
 var config = require('./config');
 
@@ -291,7 +291,7 @@ apiRoutes.post('/vote',function(req,res){
 
           }
           if(use){
-            Pack.findByIdAndUpdate(pack,{$set : {coutStar:use[0].totalStar,coutStar:use[0].count}},{new:true},function(err,update){
+            Pack.findByIdAndUpdate(pack,{$set : {coutStar:use[0].totalStar,voteStar:use[0].count}},{new:true},function(err,update){
               if(err){
                 res.json({success: 0, message: "Database error, could not find Pack"});
               }
