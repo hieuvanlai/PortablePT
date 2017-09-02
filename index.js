@@ -55,7 +55,7 @@ apiRoutes.post('/login', (req, res) => {
 
           var token = jwt.sign(user, app.get('superSecret'), { expiresIn : 60*60*24 });
           res.json({success: 1, message: "Login OK", token: token,
-          data: _.pick(user, ['phoneNumber','username','imgAvata','name','email','birthday','role', '_id', '__v']) });
+          data: _.pick(user, ['phoneNumber','username','imgAvatar','name','email','birthday','role', '_id', '__v']) });
         } else {
           res.json({success: 0, message: "Invalid password"});
         }
@@ -107,7 +107,7 @@ apiRoutes.post('/register', function(req, res) {
         success: 1,
         message: 'Saved data OK',
         token :token,
-        data: _.pick(saveUser, ['phoneNumber','username','imgAvata','name','email','birthday','role', '_id', '__v'])
+        data: _.pick(saveUser, ['phoneNumber','username','imgAvatar','name','email','birthday','role', '_id', '__v'])
       });
     }
   });
