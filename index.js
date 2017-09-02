@@ -139,7 +139,7 @@ apiRoutes.post('/update-role',function(rep,res){
 });
 apiRoutes.post('/update-user',function(rep,res){
   var body = rep.body;
-  var id= body.id;
+  var id= body._id;
   var name = body.name;
   var phoneNumber = body.phoneNumber;
   var email = body.phoneNumber;
@@ -147,7 +147,7 @@ apiRoutes.post('/update-user',function(rep,res){
   var imgAvata = body.imgAvata;
   User.findByIdAndUpdate(id,{$set : [{name:name},{phoneNumber:phoneNumber},{birthday:birthday},{imgAvata,imgAvata}]},{new:true},function(err,update){
     if(err){
-      res.json({success: 0, message: "Database error, could not find User"});
+      res.send(err);
     }
     if(update){
       res.json({success: 0, message: "Update OK"});
