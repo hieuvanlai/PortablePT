@@ -165,16 +165,16 @@ apiRoutes.post('/register-pack',function(req,res){
       pack:pack,
       star:star
     });
-    votepack.save(function(err,saveRegisterPack){
+    saveRegisterPack.save(function(err,saveRegisterPack){
       if (err) {
         res.json({
           success: 0,
-          message: 'Saved data failed'
+          message: 'Register data failed'
         });
       } else {
         res.json({
           success: 1,
-          message: 'Save data OK',
+          message: 'Register data OK',
           data:saveRegisterPack
         });
       }
