@@ -139,18 +139,18 @@ apiRoutes.post('/update-role',function(rep,res){
 });
 apiRoutes.post('/update-user',function(rep,res){
   var body = rep.body;
-  var id= body._id;
+  var _id= body._id;
   var name = body.name;
   var phoneNumber = body.phoneNumber;
   var email = body.phoneNumber;
   var birthday = birthday;
   var imgAvata = body.imgAvata;
-  User.findByIdAndUpdate(id,{$set : [{name:name},{phoneNumber:phoneNumber},{birthday:birthday},{imgAvata,imgAvata}]},{new:true},function(err,update){
+  User.findByIdAndUpdate(_id,{$set : {name:name,phoneNumber:phoneNumber,birthday:birthday,imgAvata:imgAvata}},{new:true},function(err,update){
     if(err){
       res.send(err);
     }
     if(update){
-      res.json({success: 0, message: "Update OK"});
+      res.json({success: 0, message: "Update OK",use:update});
     }
   })
 });
