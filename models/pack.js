@@ -12,7 +12,8 @@ var packSchema = new Schema({
     type:String,
     coutStar:Number,
     mediumStar:Number,
-    calendar:String
+    calendar:String,
+    content:String
   });
 packSchema.index({'$': 'text'});
 module.exports = mongoose.model('Pack', packSchema);
