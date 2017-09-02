@@ -163,13 +163,12 @@ apiRoutes.post('/register-pack',function(req,res){
     var registerPack = new RegisterPack({
       user:user,
       pack:pack,
-      star:star
     });
     registerPack.save(function(err,saveRegisterPack){
       if (err) {
         res.json({
           success: 0,
-          message: 'Register Data failed'
+          message: 'Register Data Failed'
         });
       } else {
         res.json({
