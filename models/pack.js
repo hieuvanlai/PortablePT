@@ -11,10 +11,9 @@ var packSchema = new Schema({
     address:String,
     type:String,
     coutStar:Number,
-    mediumStar:Number,
     calendar:String,
     content:String,
-    coutStar:Number
+    voteStar:Number
   });
 packSchema.index({'$': 'text'});
 module.exports = mongoose.model('Pack', packSchema);
