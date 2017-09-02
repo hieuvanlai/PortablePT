@@ -160,21 +160,21 @@ apiRoutes.post('/register-pack',function(req,res){
   var user = body.user;
   var pack = body.pack;
   var saveRegisterPack = function(user,pack){
-    var votepack = new VotePack({
+    var registerPack = new RegisterPack({
       user:user,
       pack:pack,
       star:star
     });
-    saveRegisterPack.save(function(err,saveRegisterPack){
+    registerPack.save(function(err,saveRegisterPack){
       if (err) {
         res.json({
           success: 0,
-          message: 'Register data failed'
+          message: 'Register Data failed'
         });
       } else {
         res.json({
           success: 1,
-          message: 'Register data OK',
+          message: 'Register Data OK',
           data:saveRegisterPack
         });
       }
