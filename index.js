@@ -209,7 +209,7 @@ apiRoutes.post('/update-register-pack',function(rep,res){
 
 
 apiRoutes.get('/get-my-pack/:searchString',function(req,res){
-  RegisterPack.find({user:req.params.searchString}).populate('pack').exec(function(err,use){
+  RegisterPack.find({user:req.params.searchString}).populate('pack').populate('pack.coach').exec(function(err,use){
     if(err){
       res.json({success: 0, message: "Database error, could not find Pack"});      
     }
