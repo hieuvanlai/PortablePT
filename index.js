@@ -10,8 +10,6 @@ var Hottie = require('./models/hottie');
 var User = require('./models/user');
 var Pack = require('./models/pack');
 var Sports= require('./models/sports');
-var Person= require('./models/test');
-var Story= require('./models/test2');
 var VotePack = require('./models/votepack');
 var RegisterPack = require('./models/registerpack');
 
