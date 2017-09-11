@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var bcrypt = require('bcrypt');
 var _ = require('lodash');
 var jwt = require('jsonwebtoken');
@@ -207,12 +208,15 @@ apiRoutes.post('/update-register-pack',function(rep,res){
 
 
 apiRoutes.get('/get-my-pack/:searchString',function(req,res){
-  RegisterPack.find({user:req.params.searchString}).populate('pack').populate('pack.coach').exec(function(err,use){
+  RegisterPack.find({user:req.params.searchString}).populate('pack').exec(function(err,use){
     if(err){
       res.json({success: 0, message: "Database error, could not find Pack"});      
     }
     if(use){
-      res.send(use);
+      User.populate(use, {path: 'pack.coach'}, function (err, users) {
+        res.send(users);        
+     })
+
     }
   })
 })

@@ -7,7 +7,7 @@
 6 silly lifecycle node-js-getting-started@0.2.6~prestart: no script for prestart, continuing
 7 info lifecycle node-js-getting-started@0.2.6~start: node-js-getting-started@0.2.6
 8 verbose lifecycle node-js-getting-started@0.2.6~start: unsafe-perm in lifecycle true
-9 verbose lifecycle node-js-getting-started@0.2.6~start: PATH: /usr/share/npm/bin/node-gyp-bin:/home/hieuit/PortablePT/node_modules/.bin:/home/hieuit/bin:/home/hieuit/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+9 verbose lifecycle node-js-getting-started@0.2.6~start: PATH: /usr/share/npm/bin/node-gyp-bin:/home/hieuit/PortablePT/node_modules/.bin:/home/hieuit/bin:/home/hieuit/.local/bin:/home/hieuit/bin:/home/hieuit/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
 10 verbose lifecycle node-js-getting-started@0.2.6~start: CWD: /home/hieuit/PortablePT
 11 silly lifecycle node-js-getting-started@0.2.6~start: Args: [ '-c', 'node index.js' ]
 12 silly lifecycle node-js-getting-started@0.2.6~start: Returned: code: 1  signal: null
