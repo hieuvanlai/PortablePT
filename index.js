@@ -172,7 +172,7 @@ apiRoutes.post('/register-pack',function(req,res){
       } else {
         res.json({
           success: 1,
-          message: 'Register Data OK',
+          message: 'Register  Data OK',
           data:saveRegisterPack
         });
       }
