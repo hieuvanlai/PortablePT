@@ -5,7 +5,6 @@ var bcrypt = require('bcrypt');
 var _ = require('lodash');
 var jwt = require('jsonwebtoken');
 
-
 var Hottie = require('./models/hottie');
 var User = require('./models/user');
 var Pack = require('./models/pack');
@@ -46,7 +45,7 @@ apiRoutes.post('/login', (req, res) => {
       res.json({success: 0, message: "Database error, could not find user", err: err});
     } else {
       if (!user) {
-        res.json({success: 0, message: "User not found" });
+        res.json({success: 0, message: "User   not found" });
       } else {
         var hash = user.password;
         if (bcrypt.compareSync(password, hash)) {
