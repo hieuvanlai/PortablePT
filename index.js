@@ -182,7 +182,7 @@ apiRoutes.post('/register-pack',function(req,res){
       res.json({success: 0, message: "Database error, could not find VotePack"});
     } else {
       if(data) {
-        res.json({success: 0, message: "2 VotePack"});
+        res.json({success: 0, message: "Register failed, duplicate Pack"});
       } else {
         saveRegisterPack(user,pack);
       }
