@@ -172,7 +172,7 @@ apiRoutes.post('/register-pack',function(req,res){
       } else {
         res.json({
           success: 1,
-          message: 'Register  Data OK',
+          message: 'Register Data OK',
           data:saveRegisterPack
         });
       }
@@ -210,7 +210,7 @@ apiRoutes.post('/update-register-pack',function(rep,res){
 apiRoutes.get('/get-my-pack/:searchString',function(req,res){
   RegisterPack.find({user:req.params.searchString}).populate('pack').exec(function(err,use){
     if(err){
-      res.json({success: 0, message: "Database error, could not find Pack"});      
+      res.json({success: 0, message: "Database error  , could not find Pack"});      
     }
     if(use){
       User.populate(use, {path: 'pack.coach'}, function (err, users) {
@@ -294,7 +294,7 @@ apiRoutes.post('/vote',function(req,res){
           if(use){
             Pack.findByIdAndUpdate(pack,{$set : {coutStar:use[0].totalStar,voteStar:use[0].count}},{new:true},function(err,update){
               if(err){
-                res.json({success: 0, message: "Database error, could not find Pack"});
+                res.json({success: 0, message: "Database error,   could not find Pack"});
               }
               if(update){
                 res.json({success: 0, message: "Update OK"});
