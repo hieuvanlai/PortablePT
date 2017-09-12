@@ -1,7 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var bcrypt = require('bcrypt');
 var _ = require('lodash');
 var jwt = require('jsonwebtoken');
