@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var packSchema = new Schema({
     packName:String,
     purpose:String,
-    coach: { type: Schema.Types.ObjectId, ref: 'User' },
+    coach: { type: Schema.Types.ObjectId, ref: 'User' },    
     price:String,
     duration:String,
     packImgUrl:String,
@@ -15,5 +15,5 @@ var packSchema = new Schema({
     content:String,
     voteStar:Number
   });
-packSchema.index({'$': 'text'});
+  
 module.exports = mongoose.model('Pack', packSchema);

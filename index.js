@@ -4,6 +4,8 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var _ = require('lodash');
 var jwt = require('jsonwebtoken');
+var ObjectId = require('mongodb').ObjectID;
+
 
 var Hottie = require('./models/hottie');
 var User = require('./models/user');
@@ -220,11 +222,11 @@ apiRoutes.get('/get-my-pack/:searchString',function(req,res){
 })
 apiRoutes.get('/get-my-pack-hlv/:searchString',function(req,res){
   Pack.find({coach:req.params.searchString},function(err,use){
-    if(err){
-      res.json({success: 0, message: "Database error, could not find Pack"});      
-    }
     if(use){
-      res.send(use);      
+      res.send(use)
+    }
+    if(err){
+      res.send(err)
     }
   })
 })
