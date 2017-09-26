@@ -221,7 +221,7 @@ apiRoutes.get('/get-my-pack/:searchString',function(req,res){
   })
 })
 apiRoutes.get('/get-my-pack-hlv/:searchString',function(req,res){
-  Pack.find({coach:req.params.searchString},function(err,use){
+  Pack.find({coach:req.params.searchString}).populate('coach').exec(function(err,use){
     if(use){
       res.send(use)
     }
@@ -229,6 +229,8 @@ apiRoutes.get('/get-my-pack-hlv/:searchString',function(req,res){
       res.send(err)
     }
   })
+   
+  
 })
 
 
