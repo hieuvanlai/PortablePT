@@ -448,6 +448,32 @@ apiRoutes.get('/search-pack-coach/:searchString',function(req, res){
 
 });
 
+apiRoutes.get('/get-number-HV/:searchString',function(rep,res){
+  RegisterPack.find({}).populate('pack').exec(function(err,use){
+    User.populate(use,{path:'pack.coach'},function(err,user){
+      res.json({
+        countHV: 1
+            })
+    })
+
+  })
+
+  
+});
+
+apiRoutes.get('/get-rank-HVL/:searchString',function(rep,res){
+  RegisterPack.find({}).populate('pack').exec(function(err,use){
+    User.populate(use,{path:'pack.coach'},function(err,user){
+      res.json({
+        rankHLV: 12,
+        sumHLV:120
+            })
+    })
+
+  })
+
+  
+});
 
 
 apiRoutes.post('/add-sports', function(req, res) {
