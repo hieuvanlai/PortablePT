@@ -461,7 +461,9 @@ apiRoutes.get('/get-number-HV/:searchString',function(rep,res){
   
 });
 
-apiRoutes.get('/get-rank-HVL/:searchString',function(rep,res){
+apiRoutes.post('/get-rank-HLV',function(rep,res){
+  var body = rep.body;
+  var idCoach = body.idCoach;
   RegisterPack.find({}).populate('pack').exec(function(err,use){
     User.populate(use,{path:'pack.coach'},function(err,user){
       res.json({
