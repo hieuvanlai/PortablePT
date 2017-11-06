@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var studentsSchema = new Schema({
     name:String,
     msv:String,
-    class:String,
+    classs:String,
     nameMH:String
   });
   

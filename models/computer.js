@@ -8,4 +8,4 @@ var computersSchema = new Schema({
     info:String
   });
   
-module.exports = mongoose.model('students', packSchema);
+module.exports = mongoose.model('computers', computersSchema);
