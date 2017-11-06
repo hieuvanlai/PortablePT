@@ -13,6 +13,8 @@ var Pack = require('./models/pack');
 var Sports= require('./models/sports');
 var VotePack = require('./models/votepack');
 var RegisterPack = require('./models/registerpack');
+var Students = require('./models/students');
+var computer = require('./models/computer');
 
 var config = require('./config');
 
@@ -390,6 +392,15 @@ apiRoutes.get('/get-pack-all',function(req, res){
       }
   });
 });
+apiRoutes.get('/get-student-all',function(req, res){
+  Student.find({}).exec(function(err,user){
+    if (err) {
+      res.send(err);
+    } else {
+        res.send(user);
+      }
+  });
+});
 
 apiRoutes.get('/get-hlv',function(req, res){
   User.
@@ -473,7 +484,6 @@ apiRoutes.post('/get-rank-HLV',function(rep,res){
     })
 
   })
-
   
 });
 
@@ -504,6 +514,69 @@ apiRoutes.post('/add-sports', function(req, res) {
     }
   });
   };
+
+  apiRoutes.post('/get-rank-HLV',function(rep,res){
+    var body = rep.body;
+    var idCoach = body.idCoach;
+    RegisterPack.find({}).populate('pack').exec(function(err,use){
+      User.populate(use,{path:'pack.coach'},function(err,user){
+        res.json({
+          rankHLV: 12,
+          sumHLV:120
+              })
+      })
+  
+    })
+    
+  });
+  
+  
+  apiRoutes.post('/add-student', function(req, res) {
+    var body = req.body;
+    var name = body.name;
+    var msv= body.msv;
+    var classs= body.classs;
+    var nameMH = body.nameMH;
+    
+
+  
+    var saveStudent = function( name,msv,classs,nameMH) {
+    var student = new Students({
+      name:name,
+      msv:msv,
+      classs:classs,
+      nameMH:nameMH
+    });
+  
+    var saveStudent = function( name,msv,classs,nameMH) {
+    student.save(function(err, saveStudent) {
+      if (err) {
+        res.json({
+          success: 0,
+          message: 'Saved data faile'
+        });
+      } else {
+        res.json({
+          success: 1,
+          message: 'Saved data OK',
+          data: _.pick(saveStudent, ['sportsName', 'id'])
+        });
+      }
+    });
+    };
+  
+    saveStudent.findOne({msv: msv}, function(err, user) {
+      if (err) {
+        res.json({success: 0, message: "Database error, could not find  Sports"});
+      } else {
+        if(user) {
+          res.json({success: 0, message: "Register failed, duplicate Sports"});
+        } else {
+          saveSports(name,msv,classs,nameMH);
+        }
+      }
+    });
+  }});
 
   Sports.findOne({sportsName: sportsName}, function(err, user) {
     if (err) {
