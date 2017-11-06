@@ -252,7 +252,7 @@ apiRoutes.post('/vote',function(req,res){
           message: 'Saved data failed'
         });
       } else {
-        Pack.findByIdAndUpdate(pack,{$set : {coutStar:use[0].totalStar}},{new:true},function(err,update){
+        Pack.findByIdAndUpdate(pack,{$set : {coutStar:saveVotePack[0].totalStar}},{new:true},function(err,update){
           if(err){
             res.json({success: 0, message: "Database error, could not find Pack"});
             
