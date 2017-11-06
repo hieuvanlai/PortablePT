@@ -395,7 +395,7 @@ apiRoutes.get('/get-pack-all', function (req, res) {
   });
 });
 apiRoutes.get('/get-student-all', function (req, res) {
-  Student.find({}).exec(function (err, user) {
+  Students.find({}).exec(function (err, user) {
     if (err) {
       res.send(err);
     } else {
