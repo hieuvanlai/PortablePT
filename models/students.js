@@ -5,7 +5,8 @@ var studentsSchema = new Schema({
     name:String,
     msv:String,
     classs:String,
-    nameMH:String
+    nameMH:String,
+    imgAvata:String
   });
   
 module.exports = mongoose.model('students', studentsSchema);

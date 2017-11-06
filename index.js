@@ -490,24 +490,26 @@ apiRoutes.post('/get-rank-HLV', function (rep, res) {
   })
 
 });
+
+
 apiRoutes.post('/add-students', function (req, res) {
   var body = req.body;
   var name = body.name;
   var msv = body.msv;
   var classs = body.classs;
   var nameMH = body.nameMH;
+  var imgAvata = body.imgAvata;
 
-
-
-  var saveStudent = function (name, msv, classs, nameMH) {
+  var saveStudent = function (name, msv, classs, nameMH,imgAvata) {
     var student = new Students({
       name: name,
       msv: msv,
       classs: classs,
-      nameMH: nameMH
+      nameMH: nameMH,
+      imgAvata:imgAvata
     });
 
-    var saveStudent = function (name, msv, classs, nameMH) {
+    
       student.save(function (err, saveStudent) {
         if (err) {
           res.json({
@@ -524,19 +526,19 @@ apiRoutes.post('/add-students', function (req, res) {
       });
     };
 
-    saveStudent.findOne({ msv: msv }, function (err, user) {
+    Students.findOne({ msv: msv }, function (err, user) {
       if (err) {
         res.json({ success: 0, message: "Database error, could not find  Sports" });
       } else {
         if (user) {
           res.json({ success: 0, message: "Register failed, duplicate Sports" });
         } else {
-          saveSports(name, msv, classs, nameMH);
+          saveStudent(name, msv, classs, nameMH,imgAvata);
         }
       }
     });
-  }
-});
+  });
+
 
 
 apiRoutes.post('/get-rank-HLV', function (rep, res) {
